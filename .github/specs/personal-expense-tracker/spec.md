@@ -65,37 +65,37 @@ The application follows Clean Architecture principles with four layers:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Browser (Client)                         │
-│                                                                   │
-│  ┌──────────────┐   ┌───────────────┐   ┌───────────────────┐  │
-│  │ ExpenseForm  │   │  ExpenseList  │   │  ExpenseSummary   │  │
-│  │  Component   │   │  Component    │   │    Component      │  │
-│  └──────┬───────┘   └───────┬───────┘   └────────┬──────────┘  │
-│         │                   │                     │              │
-│         └───────────────────┴─────────────────────┘             │
-│                             │                                     │
-│                    ┌────────▼────────┐                           │
-│                    │  useExpenses()  │  (React Hook)             │
-│                    └────────┬────────┘                           │
-│                             │                                     │
-│              ┌──────────────┴─────────────┐                     │
-│              │                            │                       │
-│   ┌──────────▼──────────┐  ┌────────────▼────────────┐         │
-│   │ AddExpenseUseCase   │  │  GetExpensesUseCase      │         │
-│   │  (validates input)  │  │  (filters expenses)      │         │
-│   └──────────┬──────────┘  └────────────┬────────────┘         │
-│              │                           │                        │
-│              └──────────────┬────────────┘                      │
-│                             │                                     │
-│                  ┌──────────▼───────────┐                        │
-│                  │  ExpenseApiGateway   │                        │
-│                  │  (fetch calls BFF)   │                        │
-│                  └──────────┬───────────┘                        │
+│                         Browser (Client)                        │
+│                                                                 │
+│  ┌──────────────┐   ┌───────────────┐   ┌───────────────────┐   │
+│  │ ExpenseForm  │   │  ExpenseList  │   │  ExpenseSummary   │   │
+│  │  Component   │   │  Component    │   │    Component      │   │
+│  └──────┬───────┘   └───────┬───────┘   └────────┬──────────┘   │
+│         │                   │                    │              │
+│         └───────────────────┴────────────────────┘              │
+│                             │                                   │
+│                    ┌────────▼────────┐                          │
+│                    │  useExpenses()  │  (React Hook)            │
+│                    └────────┬────────┘                          │
+│                             │                                   │
+│              ┌──────────────┴───────────┐                       │
+│              │                          │                       │
+│   ┌──────────▼──────────┐  ┌────────────▼────────────┐          │
+│   │ AddExpenseUseCase   │  │  GetExpensesUseCase     │          │
+│   │  (validates input)  │  │  (filters expenses)     │          │
+│   └──────────┬──────────┘  └────────────┬────────────┘          │
+│              │                          │                       │
+│              └──────────────┬───────────┘                       │
+│                             │                                   │
+│                  ┌──────────▼───────────┐                       │
+│                  │  ExpenseApiGateway   │                       │
+│                  │  (fetch calls BFF)   │                       │
+│                  └──────────┬───────────┘                       │
 └─────────────────────────────┼───────────────────────────────────┘
-                               │ HTTP (fetch)
+                              │ HTTP (fetch)
 ┌─────────────────────────────▼───────────────────────────────────┐
-│                        Next.js Server (BFF)                      │
-│                                                                   │
+│                        Next.js Server (BFF)                     │
+│                                                                 │
 │              ┌──────────────────────────────┐                   │
 │              │  /api/expenses  (route.ts)   │                   │
 │              │  GET  → list expenses        │                   │
@@ -110,28 +110,28 @@ The application follows Clean Architecture principles with four layers:
 User          ExpenseForm   useExpenses   AddExpenseUseCase  ExpenseApiGateway  API Route
  │                │               │               │                  │               │
  │──submit form──►│               │               │                  │               │
- │                │──addExpense()─►│               │                  │               │
- │                │               │──execute(in)──►│                  │               │
+ │                │─addExpense()─►│               │                  │               │
+ │                │               │──execute(in)─►│                  │               │
  │                │               │               │──validateAmount()│               │
  │                │               │               │  ✓ valid         │               │
  │                │               │               │──validateCategory│               │
  │                │               │               │  ✓ valid         │               │
  │                │               │               │──save(expense)──►│               │
  │                │               │               │                  │──POST /api/──►│
- │                │               │               │                  │◄─201 expense─│
- │                │               │◄──{ expense }──────────────────── │               │
+ │                │               │               │                  │◄─201 expense──│
+ │                │               │◄──{ expense }────────────────────│               │
  │                │◄─success──────│               │                  │               │
- │◄─show confirm─│               │               │                  │               │
+ │◄─show confirm──│               │               │                  │               │
 
 If validation fails:
  │──submit form──►│               │               │                  │               │
- │                │──addExpense()─►│               │                  │               │
- │                │               │──execute(in)──►│                  │               │
+ │                │─addExpense()─►│               │                  │               │
+ │                │               │──execute(in)─►│                  │               │
  │                │               │               │──validateAmount()│               │
  │                │               │               │  ✗ invalid       │               │
- │                │               │◄──throw Error──│                  │               │
+ │                │               │◄─throw Error──│                  │               │
  │                │◄─error msg────│               │                  │               │
- │◄─show error───│               │               │                  │               │
+ │◄─show error────│               │               │                  │               │
  │  (form kept)   │               │               │                  │               │
 ```
 
@@ -141,16 +141,16 @@ If validation fails:
 User          ExpenseFilter  useExpenses  GetExpensesUseCase  ExpenseApiGateway  API Route
  │                │               │               │                  │               │
  │─apply filter──►│               │               │                  │               │
- │                │──setFilter()──►│               │                  │               │
- │                │               │──execute(in)──►│                  │               │
- │                │               │               │──findAll()───────►│               │
+ │                │──setFilter()─►│               │                  │               │
+ │                │               │──execute(in)─►│                  │               │
+ │                │               │               │──findAll()──────►│               │
  │                │               │               │                  │──GET /api/───►│
  │                │               │               │                  │◄─200 list─────│
  │                │               │               │◄─expenses────────│               │
  │                │               │               │──filter locally──│               │
- │                │               │◄──{ expenses }─│                  │               │
- │                │               │──recalc total──│                  │               │
- │◄─updated list─│               │               │                  │               │
+ │                │               │◄─{ expenses }─│                  │               │
+ │                │               │──recalc total─│                  │               │
+ │◄─updated list──│               │               │                  │               │
 ```
 
 ### Components Affected
