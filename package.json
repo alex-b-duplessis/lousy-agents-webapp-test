@@ -13,7 +13,9 @@
         "lint:yaml": "yamllint ."
     },
     "dependencies": {
+        "@emotion/react": "^11.14.0",
         "@emotion/server": "^11.11.0",
+        "@emotion/styled": "^11.14.0",
         "@mui/material": "^7.3.6",
         "@mui/material-nextjs": "^7.3.6",
         "next": "^15.5.12",
